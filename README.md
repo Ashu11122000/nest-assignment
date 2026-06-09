@@ -1,98 +1,278 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Assignment
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A backend application built with NestJS demonstrating CRUD operations, authentication, authorization, testing, third-party integrations, microservices, validation, error handling, and deployment readiness.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+# Assignment Requirements
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+* Build a simple CRUD REST API using NestJS and PostgreSQL
+* Implement user authentication and authorization using JWT
+* Integrate unit and end-to-end tests
+* Connect to a third-party service (Cloudinary)
+* Create a lightweight microservice using RabbitMQ
+* Implement request validation and structured error handling
+* Dockerize the application for deployment
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+# Tech Stack
 
-## Compile and run the project
+## Backend
 
-```bash
-# development
-$ npm run start
+* NestJS
+* TypeScript
+* Node.js
 
-# watch mode
-$ npm run start:dev
+## Database
 
-# production mode
-$ npm run start:prod
-```
+* PostgreSQL
+* TypeORM
 
-## Run tests
+## Authentication
 
-```bash
-# unit tests
-$ npm run test
+* JWT
+* Passport
+* bcrypt
 
-# e2e tests
-$ npm run test:e2e
+## Validation
 
-# test coverage
-$ npm run test:cov
-```
+* class-validator
+* class-transformer
+
+## Testing
+
+* Jest
+* Supertest
+
+## File Storage
+
+* Cloudinary
+
+## Messaging
+
+* RabbitMQ
 
 ## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+* Docker
+* Docker Compose
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
+
+# Project Setup
+
+## 1. Install NestJS CLI
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install -g @nestjs/cli
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Verify installation:
 
-## Resources
+```bash
+nest --version
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 2. Create NestJS Project
 
-## Support
+```bash
+nest new nest-assignment
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Select:
 
-## Stay in touch
+```text
+npm
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Move into the project:
 
-## License
+```bash
+cd nest-assignment
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Start development server:
+
+```bash
+npm run start:dev
+```
+
+Application will run at:
+
+```text
+http://localhost:3000
+```
+
+Expected response:
+
+```text
+Hello World!
+```
+
+---
+
+# Installed Dependencies
+
+## Database
+
+```bash
+npm install @nestjs/typeorm typeorm pg
+```
+
+Purpose:
+
+* PostgreSQL integration
+* ORM support using TypeORM
+
+---
+
+## Authentication
+
+```bash
+npm install @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
+```
+
+Development types:
+
+```bash
+npm install -D @types/passport-jwt @types/bcrypt
+```
+
+Purpose:
+
+* JWT Authentication
+* Passport Strategies
+* Password Hashing
+
+---
+
+## Validation
+
+```bash
+npm install class-validator class-transformer
+```
+
+Purpose:
+
+* DTO Validation
+* Request Transformation
+
+---
+
+## Configuration Management
+
+```bash
+npm install @nestjs/config
+```
+
+Purpose:
+
+* Environment Variable Management
+* Configuration Loading
+
+---
+
+## File Upload
+
+```bash
+npm install @nestjs/platform-express multer
+```
+
+Development types:
+
+```bash
+npm install -D @types/multer
+```
+
+Purpose:
+
+* File Upload Handling
+* Multipart Form Data Processing
+
+---
+
+## Cloudinary Integration
+
+```bash
+npm install cloudinary
+```
+
+Purpose:
+
+* Cloud File Storage
+* Image and Document Uploads
+
+---
+
+## RabbitMQ Microservices
+
+```bash
+npm install @nestjs/microservices amqplib amqp-connection-manager
+```
+
+Purpose:
+
+* Event Driven Communication
+* Message Queue Processing
+* Microservice Architecture
+
+---
+
+## Testing
+
+```bash
+npm install supertest
+npm install -D @types/supertest
+```
+
+Purpose:
+
+* API Integration Testing
+* End-to-End Testing
+
+---
+
+# Docker Installation
+
+Verify Docker installation:
+
+```bash
+docker --version
+```
+
+Verify Docker Compose:
+
+```bash
+docker compose version
+```
+
+Expected Output Example:
+
+```bash
+Docker version 28.x.x
+Docker Compose version v2.x.x
+```
+
+---
+
+## Next Steps
+
+* Configure PostgreSQL using Docker
+* Configure RabbitMQ using Docker
+* Create Environment Variables
+* Configure TypeORM
+* Configure Validation Pipe
+* Implement Users Module
+* Implement JWT Authentication
+* Implement Role-Based Authorization
+* Build CRUD APIs
+* Integrate Cloudinary
+* Create RabbitMQ Microservice
+* Add Unit Tests
+* Add E2E Tests
+* Dockerize Application
+
+---
