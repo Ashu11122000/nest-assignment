@@ -1553,5 +1553,207 @@ At the end of Phase 2, the application contains a fully functional authenticatio
 
 Users can securely register, authenticate, receive access tokens, and access protected resources based on their assigned roles.
 
-The application is now ready for **Phase 3 – Products CRUD Module with Authentication & Authorization Integration**, where authenticated users and role-based permissions will be applied to business resources.
+---
+
+
+# Phase 3: Product Management Module
+
+## Overview
+
+Phase 3 extends the application by introducing a dedicated Product Management module. This phase demonstrates how to build a complete CRUD (Create, Read, Update, Delete) feature in NestJS while following a modular and scalable architecture.
+
+The Product module is designed to manage product-related data and serves as an example of how business entities can be organized into independent modules. It integrates with PostgreSQL through TypeORM and follows the same layered architecture used throughout the application.
+
+---
+
+## Objectives
+
+The primary goals of this phase are:
+
+* Create a dedicated Product entity and database table.
+* Implement full CRUD operations for products.
+* Protect product endpoints using JWT authentication.
+* Apply request validation using DTOs and class-validator.
+* Organize business logic using Controller, Service, and Repository layers.
+* Demonstrate scalable backend architecture practices.
+
+---
+
+## Product Entity
+
+A Product entity is introduced to represent items managed by the system.
+
+Each product contains:
+
+* Unique identifier
+* Product name
+* Description
+* Price
+* Available stock quantity
+* Creation timestamp
+* Last update timestamp
+
+The entity is mapped to a PostgreSQL table using TypeORM decorators.
+
+---
+
+## Architecture
+
+The Product module follows a layered architecture:
+
+### Controller Layer
+
+Responsible for:
+
+* Receiving HTTP requests
+* Validating request data
+* Mapping routes to business operations
+* Returning responses to clients
+
+### Service Layer
+
+Responsible for:
+
+* Business logic
+* Validation and error handling
+* Coordinating data operations
+* Communicating with the repository layer
+
+### Repository Layer
+
+Responsible for:
+
+* Database interactions
+* Query execution
+* Data persistence and retrieval
+
+### DTO Layer
+
+Responsible for:
+
+* Request validation
+* Data transformation
+* Defining API contracts
+
+---
+
+## Implemented Features
+
+### Create Product
+
+Allows authenticated users to create new products by providing:
+
+* Name
+* Description
+* Price
+* Stock quantity
+
+Validation ensures that required fields are present and contain valid values.
+
+---
+
+### Retrieve Products
+
+Provides the ability to:
+
+* Fetch all products
+* Retrieve a specific product by ID
+* Filter products using query parameters
+
+This enables flexible product searching and browsing.
+
+---
+
+### Update Product
+
+Allows modification of existing product information.
+
+Users can update:
+
+* Product name
+* Description
+* Price
+* Stock quantity
+
+Partial updates are supported to improve usability.
+
+---
+
+### Delete Product
+
+Allows removal of products from the system.
+
+The application verifies product existence before deletion and returns meaningful errors when records are not found.
+
+---
+
+## Authentication Integration
+
+All Product APIs are protected using JWT authentication.
+
+Access to product resources requires a valid access token generated during the authentication phase.
+
+This ensures:
+
+* Secure access to resources
+* User identity verification
+* Protection against unauthorized requests
+
+---
+
+## Validation and Error Handling
+
+Input validation is implemented using:
+
+* class-validator
+* DTO-based validation
+* Global validation pipes
+
+The system handles common scenarios such as:
+
+* Invalid product identifiers
+* Missing required fields
+* Incorrect data types
+* Non-existent products
+
+Meaningful error responses are returned to clients.
+
+---
+
+## Database Integration
+
+The Product module integrates with PostgreSQL through TypeORM.
+
+TypeORM provides:
+
+* Entity mapping
+* Repository pattern support
+* Query generation
+* Automatic schema synchronization (during development)
+
+This enables efficient and maintainable database operations.
+
+---
+
+## Learning Outcomes
+
+By completing this phase, the project demonstrates:
+
+* NestJS modular architecture
+* TypeORM integration
+* Repository pattern implementation
+* CRUD API development
+* Request validation
+* JWT-protected endpoints
+* Error handling best practices
+* Scalable backend design principles
+
+---
+
+## Result
+
+At the end of Phase 3, the application supports secure product management functionality with complete CRUD operations, validation, authentication, and database integration, providing a strong foundation for future features such as file uploads, third-party integrations, microservices, and advanced business workflows.
+
+
+---
 
