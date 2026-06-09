@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductsModule } from './modules/products/products.module';
+import { RabbitmqModule } from './modules/rabbitmq/rabbitmq.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 import { User } from './modules/users/entities/user.entity';
 import { Product } from './modules/products/entities/product.entity';
@@ -31,6 +33,8 @@ import { Product } from './modules/products/entities/product.entity';
     UsersModule,
     AuthModule,
     ProductsModule,
+    RabbitmqModule,
+    NotificationsModule,
   ],
 })
 export class AppModule {}
