@@ -825,3 +825,274 @@ The project is now ready for Phase 1: Users CRUD Module implementation.
 
 ---
 
+# Phase 1 – Users CRUD Module
+
+## Objective
+
+The goal of Phase 1 is to implement a complete User Management module following NestJS best practices. This phase establishes the application's first business module and introduces database-driven CRUD operations using PostgreSQL and TypeORM.
+
+The Users Module serves as the foundation for future features such as Authentication, Authorization, Role-Based Access Control (RBAC), Testing, and Microservices.
+
+---
+
+# Features Implemented
+
+## User Entity
+
+A User entity was created and mapped to the PostgreSQL database using TypeORM.
+
+The entity is responsible for representing user records and defining the database schema.
+
+### User Information
+
+Each user contains:
+
+* ID
+* First Name
+* Last Name
+* Email Address
+* Phone Number
+* Created Timestamp
+* Updated Timestamp
+
+---
+
+## Users Module
+
+A dedicated Users Module was created following NestJS modular architecture.
+
+Responsibilities:
+
+* User management
+* User data persistence
+* User validation
+* CRUD operations
+* Future authentication integration
+
+---
+
+## Data Transfer Objects (DTOs)
+
+DTOs were implemented to validate incoming requests and maintain data consistency.
+
+### Create User DTO
+
+Used when creating a new user.
+
+Validates:
+
+* First Name
+* Last Name
+* Email
+* Phone Number
+
+---
+
+### Update User DTO
+
+Used for partial updates.
+
+Allows updating:
+
+* First Name
+* Last Name
+* Email
+* Phone Number
+
+---
+
+### Query User DTO
+
+Used for filtering and searching users.
+
+Supports:
+
+* First Name filtering
+* Last Name filtering
+* Email filtering
+
+---
+
+# Repository Layer
+
+A custom repository layer was implemented to separate database access from business logic.
+
+Responsibilities:
+
+* User creation
+* User retrieval
+* User updates
+* User deletion
+* Email lookup
+* User filtering
+
+Benefits:
+
+* Cleaner architecture
+* Better maintainability
+* Easier testing
+* Separation of concerns
+
+---
+
+# Service Layer
+
+The Users Service contains all business logic.
+
+Responsibilities:
+
+### Create User
+
+* Creates new users
+* Validates email uniqueness
+* Saves users to PostgreSQL
+
+### Get Users
+
+* Retrieves all users
+* Supports filtering and searching
+
+### Get User By ID
+
+* Fetches a specific user
+* Returns proper errors when user does not exist
+
+### Update User
+
+* Updates existing user information
+* Prevents duplicate email addresses
+
+### Delete User
+
+* Removes users from the database
+
+---
+
+# Controller Layer
+
+REST APIs were exposed through the Users Controller.
+
+Implemented endpoints:
+
+| Method | Endpoint   | Description    |
+| ------ | ---------- | -------------- |
+| POST   | /users     | Create User    |
+| GET    | /users     | Get All Users  |
+| GET    | /users/:id | Get User By ID |
+| PATCH  | /users/:id | Update User    |
+| DELETE | /users/:id | Delete User    |
+
+---
+
+# Validation
+
+Global validation configured in Phase 0 is utilized throughout the Users Module.
+
+Validation features:
+
+* Required field validation
+* Email format validation
+* Type transformation
+* Unknown property rejection
+* Request sanitization
+
+---
+
+# Error Handling
+
+Structured exception handling was implemented.
+
+### Bad Request (400)
+
+Returned when:
+
+* Invalid payload is sent
+* Validation fails
+
+### Not Found (404)
+
+Returned when:
+
+* Requested user does not exist
+
+### Conflict (409)
+
+Returned when:
+
+* Email already exists
+
+---
+
+# Database Integration
+
+The Users Module is fully integrated with PostgreSQL through TypeORM.
+
+Capabilities:
+
+* Automatic entity mapping
+* Repository pattern
+* Database persistence
+* Query filtering
+* Record updates
+* Record deletion
+
+---
+
+# Search & Filtering
+
+Basic filtering support was implemented.
+
+Supported filters:
+
+* First Name
+* Last Name
+* Email
+
+Example use cases:
+
+* Search users by name
+* Search users by email
+* Filter specific user groups
+
+---
+
+# Testing Performed
+
+The following scenarios were verified:
+
+* User creation
+* User retrieval
+* User updates
+* User deletion
+* Validation errors
+* Duplicate email prevention
+* Non-existent user handling
+* Database persistence
+
+---
+
+# Learning Outcomes
+
+Phase 1 introduced the following concepts:
+
+* NestJS Modules
+* Controllers
+* Services
+* DTOs
+* Entity Design
+* Repository Pattern
+* PostgreSQL Integration
+* TypeORM Operations
+* Validation
+* Exception Handling
+* CRUD Architecture
+
+---
+
+# Outcome
+
+At the end of Phase 1, the application contains a fully functional Users Management system backed by PostgreSQL and TypeORM.
+
+The project now has a solid domain layer that can be used as the foundation for authentication, authorization, testing, third-party integrations, and microservice communication.
+
+The application is now ready for **Phase 2 – Authentication & Authorization (JWT + Passport + RBAC Foundation)**.
