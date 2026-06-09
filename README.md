@@ -1095,4 +1095,463 @@ At the end of Phase 1, the application contains a fully functional Users Managem
 
 The project now has a solid domain layer that can be used as the foundation for authentication, authorization, testing, third-party integrations, and microservice communication.
 
-The application is now ready for **Phase 2 – Authentication & Authorization (JWT + Passport + RBAC Foundation)**.
+---
+
+# Phase 2 – Authentication & Authorization (JWT + Passport + RBAC Foundation)
+
+## Objective
+
+The goal of Phase 2 is to implement a secure authentication and authorization system for the application using JWT (JSON Web Tokens), Passport.js, bcrypt password hashing, and Role-Based Access Control (RBAC).
+
+This phase builds on the Users Module developed in Phase 1 and introduces user identity management, secure login mechanisms, protected routes, and authorization controls that will be used throughout the remainder of the project.
+
+---
+
+# Features Implemented
+
+## Authentication Module
+
+A dedicated Authentication Module was created to handle all authentication-related operations.
+
+Responsibilities:
+
+* User registration
+* User login
+* Password hashing
+* JWT token generation
+* User validation
+* Authentication strategies
+* Authorization foundation
+
+---
+
+# User Entity Enhancements
+
+The User entity was extended to support authentication and authorization.
+
+Additional fields introduced:
+
+* Password
+* Role
+
+### Password
+
+Stores a securely hashed version of the user's password using bcrypt.
+
+Benefits:
+
+* Prevents storage of plain-text passwords
+* Improves application security
+* Follows industry-standard authentication practices
+
+### Role
+
+Defines the authorization level of the user.
+
+Supported roles:
+
+* ADMIN
+* USER
+
+Default role:
+
+```text
+USER
+```
+
+---
+
+# Authentication DTOs
+
+DTOs were created to validate authentication requests.
+
+## Register DTO
+
+Used during user registration.
+
+Validates:
+
+* First Name
+* Last Name
+* Email
+* Phone Number
+* Password
+
+Purpose:
+
+* Ensures valid registration requests
+* Prevents invalid user creation
+
+---
+
+## Login DTO
+
+Used during user login.
+
+Validates:
+
+* Email Address
+* Password
+
+Purpose:
+
+* Ensures proper authentication requests
+* Standardizes login payload structure
+
+---
+
+## Refresh Token DTO
+
+Prepared for future token refresh implementation.
+
+Validates:
+
+* Refresh Token
+
+Purpose:
+
+* Future access token renewal support
+* Improved session management
+
+---
+
+# Password Security
+
+bcrypt was integrated to securely hash user passwords before storing them in the database.
+
+Authentication flow:
+
+```text
+User Password
+      ↓
+bcrypt Hashing
+      ↓
+Database Storage
+```
+
+Example:
+
+```text
+Input Password:
+Ashu123@
+
+Stored Value:
+$2b$10$...
+```
+
+Benefits:
+
+* Secure password storage
+* Protection against database leaks
+* Industry-standard password security
+
+---
+
+# JWT Authentication
+
+JSON Web Tokens (JWT) were implemented for stateless authentication.
+
+After successful login:
+
+```text
+User Login
+      ↓
+Credentials Validation
+      ↓
+JWT Generation
+      ↓
+Access Token Returned
+```
+
+Example response:
+
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIs..."
+}
+```
+
+---
+
+# JWT Payload
+
+Each generated token contains:
+
+```json
+{
+  "sub": 1,
+  "email": "user@example.com",
+  "role": "USER"
+}
+```
+
+Payload fields:
+
+| Field | Description |
+| ----- | ----------- |
+| sub   | User ID     |
+| email | User Email  |
+| role  | User Role   |
+
+---
+
+# Passport Integration
+
+Passport.js was integrated as the authentication middleware.
+
+Implemented strategies:
+
+## JWT Strategy
+
+Responsible for:
+
+* Extracting JWT from requests
+* Validating token authenticity
+* Decoding payload information
+* Attaching authenticated user data to requests
+
+Authentication flow:
+
+```text
+Request
+   ↓
+Bearer Token
+   ↓
+JWT Strategy
+   ↓
+Token Validation
+   ↓
+Request User Attached
+```
+
+---
+
+## Local Strategy
+
+Responsible for:
+
+* Processing login credentials
+* Validating email and password
+* Authenticating users before token generation
+
+Authentication flow:
+
+```text
+Email + Password
+       ↓
+Local Strategy
+       ↓
+User Validation
+       ↓
+Authentication Success
+```
+
+---
+
+# Authentication Endpoints
+
+The following APIs were introduced:
+
+| Method | Endpoint       | Description                |
+| ------ | -------------- | -------------------------- |
+| POST   | /auth/register | Register New User          |
+| POST   | /auth/login    | Authenticate User          |
+| POST   | /auth/refresh  | Refresh Token (Foundation) |
+
+---
+
+# JWT Guard
+
+A JWT Authentication Guard was implemented.
+
+Responsibilities:
+
+* Protect private routes
+* Verify JWT tokens
+* Reject unauthorized requests
+
+Example:
+
+```http
+Authorization: Bearer TOKEN
+```
+
+Without token:
+
+```http
+401 Unauthorized
+```
+
+---
+
+# Authorization (RBAC Foundation)
+
+Role-Based Access Control (RBAC) was introduced to support authorization throughout the application.
+
+Supported roles:
+
+```text
+ADMIN
+USER
+```
+
+Purpose:
+
+* Restrict sensitive operations
+* Protect administrative endpoints
+* Support scalable permission management
+
+---
+
+# Roles Decorator
+
+A custom Roles Decorator was implemented.
+
+Purpose:
+
+* Declare required roles for endpoints
+* Simplify authorization logic
+
+Example:
+
+```text
+ADMIN ONLY
+```
+
+---
+
+# Roles Guard
+
+A dedicated Roles Guard was implemented.
+
+Responsibilities:
+
+* Read required roles
+* Compare user permissions
+* Grant or deny access
+
+Authorization flow:
+
+```text
+Request
+   ↓
+JWT Validation
+   ↓
+Role Validation
+   ↓
+Access Granted / Denied
+```
+
+---
+
+# Protected Routes
+
+Application endpoints can now be protected using authentication and authorization guards.
+
+Examples:
+
+Protected:
+
+```text
+GET /users
+GET /users/:id
+PATCH /users/:id
+DELETE /users/:id
+```
+
+Public:
+
+```text
+POST /auth/register
+POST /auth/login
+```
+
+---
+
+# Environment Configuration
+
+Additional environment variables were introduced.
+
+```env
+JWT_SECRET=my_super_secret_key
+JWT_EXPIRES_IN=1d
+```
+
+Purpose:
+
+* Token signing
+* Token validation
+* Token expiration management
+
+---
+
+# Security Improvements
+
+Phase 2 significantly improved application security through:
+
+* Password hashing
+* JWT authentication
+* Protected routes
+* Role-based authorization
+* Secure credential validation
+* Stateless authentication
+
+---
+
+# Testing Performed
+
+The following authentication scenarios were verified:
+
+### Registration
+
+* New user registration
+* Duplicate email prevention
+* Request validation
+
+### Login
+
+* Valid credential authentication
+* JWT generation
+* Invalid credential rejection
+
+### JWT Authentication
+
+* Access with valid token
+* Rejection of invalid tokens
+* Rejection of expired tokens
+
+### Authorization
+
+* User role validation
+* Access restriction enforcement
+* Unauthorized access prevention
+
+---
+
+# Learning Outcomes
+
+Phase 2 introduced the following concepts:
+
+* Authentication Architecture
+* Authorization Architecture
+* JWT Authentication
+* Passport Strategies
+* Password Hashing
+* bcrypt
+* JWT Guards
+* Local Authentication
+* Role-Based Access Control (RBAC)
+* Custom Decorators
+* Custom Guards
+* Secure API Design
+
+---
+
+# Outcome
+
+At the end of Phase 2, the application contains a fully functional authentication and authorization system built using NestJS, Passport, JWT, and bcrypt.
+
+Users can securely register, authenticate, receive access tokens, and access protected resources based on their assigned roles.
+
+The application is now ready for **Phase 3 – Products CRUD Module with Authentication & Authorization Integration**, where authenticated users and role-based permissions will be applied to business resources.
+
