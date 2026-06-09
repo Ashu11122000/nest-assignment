@@ -276,3 +276,222 @@ Docker Compose version v2.x.x
 * Dockerize Application
 
 ---
+
+# Folder Structure
+
+```text
+nest-assignment/
+│
+├── src/
+│   │
+│   ├── main.ts
+│   ├── app.module.ts
+│   │
+│   ├── config/
+│   │   ├── configuration.ts
+│   │   ├── database.config.ts
+│   │   ├── jwt.config.ts
+│   │   ├── cloudinary.config.ts
+│   │   ├── rabbitmq.config.ts
+│   │   └── validation.config.ts
+│   │
+│   ├── common/
+│   │   │
+│   │   ├── decorators/
+│   │   │   ├── current-user.decorator.ts
+│   │   │   ├── public.decorator.ts
+│   │   │   └── roles.decorator.ts
+│   │   │
+│   │   ├── enums/
+│   │   │   ├── role.enum.ts
+│   │   │   └── token-type.enum.ts
+│   │   │
+│   │   ├── filters/
+│   │   │   ├── all-exceptions.filter.ts
+│   │   │   ├── http-exception.filter.ts
+│   │   │   └── database-exception.filter.ts
+│   │   │
+│   │   ├── guards/
+│   │   │   ├── jwt-auth.guard.ts
+│   │   │   ├── roles.guard.ts
+│   │   │   └── local-auth.guard.ts
+│   │   │
+│   │   ├── interceptors/
+│   │   │   ├── logging.interceptor.ts
+│   │   │   ├── response.interceptor.ts
+│   │   │   └── timeout.interceptor.ts
+│   │   │
+│   │   ├── middleware/
+│   │   │   └── logger.middleware.ts
+│   │   │
+│   │   ├── pipes/
+│   │   │   ├── validation.pipe.ts
+│   │   │   └── parse-id.pipe.ts
+│   │   │
+│   │   ├── constants/
+│   │   │   ├── messages.constant.ts
+│   │   │   ├── jwt.constant.ts
+│   │   │   └── rabbitmq.constant.ts
+│   │   │
+│   │   ├── interfaces/
+│   │   │   ├── jwt-payload.interface.ts
+│   │   │   ├── request-user.interface.ts
+│   │   │   └── api-response.interface.ts
+│   │   │
+│   │   └── utils/
+│   │       ├── hash.util.ts
+│   │       ├── pagination.util.ts
+│   │       └── response.util.ts
+│   │
+│   ├── database/
+│   │   ├── database.module.ts
+│   │   ├── database.providers.ts
+│   │   ├── data-source.ts
+│   │   │
+│   │   ├── migrations/
+│   │   │   ├── 001-create-users.ts
+│   │   │   ├── 002-create-products.ts
+│   │   │   └── 003-create-files.ts
+│   │   │
+│   │   └── seeds/
+│   │       ├── admin.seed.ts
+│   │       └── user.seed.ts
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── auth/
+│   │   │   │
+│   │   │   ├── dto/
+│   │   │   │   ├── login.dto.ts
+│   │   │   │   ├── register.dto.ts
+│   │   │   │   └── refresh-token.dto.ts
+│   │   │   │
+│   │   │   ├── strategies/
+│   │   │   │   ├── jwt.strategy.ts
+│   │   │   │   └── local.strategy.ts
+│   │   │   │
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── auth.module.ts
+│   │   │   └── auth.repository.ts
+│   │   │
+│   │   ├── users/
+│   │   │   │
+│   │   │   ├── dto/
+│   │   │   │   ├── create-user.dto.ts
+│   │   │   │   ├── update-user.dto.ts
+│   │   │   │   └── query-user.dto.ts
+│   │   │   │
+│   │   │   ├── entities/
+│   │   │   │   └── user.entity.ts
+│   │   │   │
+│   │   │   ├── users.controller.ts
+│   │   │   ├── users.service.ts
+│   │   │   ├── users.module.ts
+│   │   │   └── users.repository.ts
+│   │   │
+│   │   ├── products/
+│   │   │   │
+│   │   │   ├── dto/
+│   │   │   │   ├── create-product.dto.ts
+│   │   │   │   ├── update-product.dto.ts
+│   │   │   │   └── query-product.dto.ts
+│   │   │   │
+│   │   │   ├── entities/
+│   │   │   │   └── product.entity.ts
+│   │   │   │
+│   │   │   ├── products.controller.ts
+│   │   │   ├── products.service.ts
+│   │   │   ├── products.module.ts
+│   │   │   └── products.repository.ts
+│   │   │
+│   │   ├── uploads/
+│   │   │   │
+│   │   │   ├── dto/
+│   │   │   │   └── upload-file.dto.ts
+│   │   │   │
+│   │   │   ├── entities/
+│   │   │   │   └── file.entity.ts
+│   │   │   │
+│   │   │   ├── uploads.controller.ts
+│   │   │   ├── uploads.service.ts
+│   │   │   ├── uploads.module.ts
+│   │   │   └── cloudinary.service.ts
+│   │   │
+│   │   ├── notifications/
+│   │   │   │
+│   │   │   ├── dto/
+│   │   │   │   └── create-notification.dto.ts
+│   │   │   │
+│   │   │   ├── notifications.controller.ts
+│   │   │   ├── notifications.service.ts
+│   │   │   └── notifications.module.ts
+│   │   │
+│   │   └── rabbitmq/
+│   │       │
+│   │       ├── consumers/
+│   │       │   └── notification.consumer.ts
+│   │       │
+│   │       ├── producers/
+│   │       │   └── notification.producer.ts
+│   │       │
+│   │       ├── rabbitmq.service.ts
+│   │       └── rabbitmq.module.ts
+│   │
+│   ├── microservices/
+│   │   │
+│   │   ├── notification-service/
+│   │   │   ├── notification.controller.ts
+│   │   │   ├── notification.service.ts
+│   │   │   ├── notification.module.ts
+│   │   │   └── main.ts
+│   │
+│   └── types/
+│       ├── express.d.ts
+│       └── cloudinary.d.ts
+│
+├── test/
+│   │
+│   ├── unit/
+│   │   ├── auth.service.spec.ts
+│   │   ├── users.service.spec.ts
+│   │   ├── products.service.spec.ts
+│   │   └── uploads.service.spec.ts
+│   │
+│   ├── e2e/
+│   │   ├── auth.e2e-spec.ts
+│   │   ├── users.e2e-spec.ts
+│   │   ├── products.e2e-spec.ts
+│   │   └── uploads.e2e-spec.ts
+│   │
+│   ├── mocks/
+│   │   ├── user.mock.ts
+│   │   ├── product.mock.ts
+│   │   └── jwt.mock.ts
+│   │
+│   └── jest-e2e.json
+│
+├── docker/
+│   ├── postgres/
+│   │   └── init.sql
+│   │
+│   └── rabbitmq/
+│       └── definitions.json
+│
+├── .env
+├── .env.example
+├── .gitignore
+├── .dockerignore
+│
+├── Dockerfile
+├── docker-compose.yml
+│
+├── nest-cli.json
+├── tsconfig.json
+├── tsconfig.build.json
+│
+├── package.json
+├── package-lock.json
+│
+├── README.md
+```
