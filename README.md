@@ -3039,3 +3039,337 @@ The system can now be validated automatically through unit tests and end-to-end 
 
 ---
 
+# Phase 8 – Dockerization & Deployment Readiness
+
+## Objective
+
+The goal of Phase 8 is to prepare the application for deployment by containerizing all services using Docker and Docker Compose.
+
+Up to this point, the application relies on locally installed dependencies such as PostgreSQL and RabbitMQ. While this setup works for development, it can lead to environment inconsistencies across different machines. Docker solves this problem by packaging the application and its dependencies into isolated, portable containers.
+
+This phase demonstrates how to deploy a NestJS application in a consistent and reproducible environment while fulfilling the assignment requirement of configuring basic deployment settings for a cloud-ready application.
+
+---
+
+# Features Implemented
+
+## Docker Integration
+
+The NestJS application was containerized using Docker.
+
+Responsibilities:
+
+* Package the application into a portable container
+* Eliminate environment-specific issues
+* Standardize deployment workflows
+* Improve development consistency
+
+The application can now run identically across development, testing, and production environments.
+
+---
+
+## Dockerfile Configuration
+
+A Dockerfile was created to define how the application image is built.
+
+Responsibilities:
+
+* Install dependencies
+* Copy application source code
+* Build the NestJS project
+* Expose application ports
+* Define application startup commands
+
+The Dockerfile acts as the blueprint for creating application containers.
+
+---
+
+## Docker Compose Setup
+
+Docker Compose was introduced to manage multiple containers as a single application stack.
+
+Responsibilities:
+
+* Start all services together
+* Manage service dependencies
+* Simplify local development
+* Provide infrastructure orchestration
+
+The complete application stack can now be started using a single command.
+
+---
+
+# Containerized Services
+
+## NestJS Application Container
+
+The main application runs inside its own Docker container.
+
+Responsibilities:
+
+* Serve REST APIs
+* Handle authentication
+* Process business logic
+* Communicate with PostgreSQL and RabbitMQ
+
+---
+
+## PostgreSQL Container
+
+PostgreSQL runs inside a dedicated database container.
+
+Responsibilities:
+
+* Store application data
+* Manage user records
+* Manage product records
+* Provide persistent database storage
+
+Benefits:
+
+* No local PostgreSQL installation required
+* Consistent database environments
+* Simplified setup process
+
+---
+
+## RabbitMQ Container
+
+RabbitMQ runs inside its own messaging container.
+
+Responsibilities:
+
+* Queue management
+* Event routing
+* Producer-consumer communication
+* Microservice messaging
+
+Benefits:
+
+* Reliable event processing
+* Independent infrastructure management
+* Consistent messaging environment
+
+---
+
+# Application Architecture
+
+The containerized architecture follows the structure below:
+
+```text
+┌─────────────────────┐
+│   NestJS API        │
+└──────────┬──────────┘
+           │
+     ┌─────┴─────┐
+     │           │
+     ▼           ▼
+
+┌─────────┐   ┌─────────┐
+│PostgreSQL│   │RabbitMQ│
+└─────────┘   └─────────┘
+```
+
+All services communicate through Docker's internal networking system.
+
+---
+
+# Environment Configuration
+
+Application configuration continues to be managed using environment variables.
+
+Examples:
+
+```env
+PORT=3000
+
+DB_HOST=postgres
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=password
+DB_NAME=nest_assignment
+
+RABBITMQ_URL=amqp://rabbitmq:5672
+
+JWT_SECRET=my_super_secret_key
+```
+
+Benefits:
+
+* Environment-specific configuration
+* Secure credential management
+* Easier deployment customization
+
+---
+
+# Persistent Storage
+
+Docker volumes were configured to preserve data even when containers are restarted.
+
+Persistent storage includes:
+
+### PostgreSQL Data
+
+* User records
+* Product records
+* Application data
+
+### RabbitMQ Data
+
+* Queues
+* Exchanges
+* Messages
+* Configuration
+
+Benefits:
+
+* Prevents accidental data loss
+* Supports container recreation
+* Improves reliability
+
+---
+
+# Networking Configuration
+
+Docker networking allows containers to communicate using service names instead of IP addresses.
+
+Examples:
+
+```text
+postgres
+rabbitmq
+```
+
+This simplifies configuration and improves portability across environments.
+
+---
+
+# Application Startup Process
+
+The deployment workflow follows the sequence below:
+
+```text
+Docker Compose Start
+          ↓
+PostgreSQL Container Starts
+          ↓
+RabbitMQ Container Starts
+          ↓
+NestJS Application Starts
+          ↓
+Database Connection Established
+          ↓
+RabbitMQ Connection Established
+          ↓
+Application Ready
+```
+
+This ensures all dependencies are available before the application begins serving requests.
+
+---
+
+# Deployment Commands
+
+Build containers:
+
+```bash
+docker compose build
+```
+
+Start all services:
+
+```bash
+docker compose up -d
+```
+
+View running containers:
+
+```bash
+docker ps
+```
+
+Stop services:
+
+```bash
+docker compose down
+```
+
+View application logs:
+
+```bash
+docker compose logs -f
+```
+
+These commands provide a complete deployment workflow.
+
+---
+
+# Security Considerations
+
+Several deployment best practices were applied:
+
+* Environment-based secrets
+* Isolated containers
+* Internal Docker networking
+* Service separation
+* Controlled port exposure
+
+These measures improve application security and maintainability.
+
+---
+
+# Benefits of Dockerization
+
+Containerization provides several advantages:
+
+* Consistent environments
+* Simplified deployment
+* Improved scalability
+* Easier onboarding
+* Infrastructure portability
+* Better resource isolation
+* Reduced configuration issues
+
+These are standard practices in modern cloud-native applications.
+
+---
+
+# Learning Outcomes
+
+Phase 8 demonstrates the following concepts:
+
+* Docker Fundamentals
+* Containerization
+* Dockerfile Configuration
+* Docker Compose
+* Service Orchestration
+* Container Networking
+* Persistent Volumes
+* Environment Management
+* Infrastructure Automation
+* Deployment Readiness
+
+---
+
+# Testing Performed
+
+The following deployment scenarios were verified:
+
+* Docker image builds successfully
+* NestJS container starts successfully
+* PostgreSQL container starts successfully
+* RabbitMQ container starts successfully
+* Application connects to PostgreSQL
+* Application connects to RabbitMQ
+* API endpoints remain functional
+* Data persists after container restart
+
+---
+
+# Outcome
+
+At the end of Phase 8, the entire application stack is fully containerized and deployment-ready. The NestJS API, PostgreSQL database, and RabbitMQ message broker can be started and managed through Docker Compose, providing a consistent and portable environment across development and production systems.
+
+This phase successfully fulfills the deployment requirement of the assignment and completes the application's transition into a cloud-ready, production-oriented architecture.
+
+---
