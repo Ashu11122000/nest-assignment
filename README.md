@@ -495,3 +495,333 @@ nest-assignment/
 │
 ├── README.md
 ```
+
+---
+
+# Phase 0 – Project Foundation & Environment Setup
+
+## Objective
+
+The goal of Phase 0 is to establish the foundational infrastructure for the NestJS application before implementing any business logic. This phase focuses on project initialization, environment configuration, database connectivity, validation setup, and application architecture preparation.
+
+---
+
+# Project Initialization
+
+A new NestJS project was created using the Nest CLI.
+
+```bash
+nest new nest-assignment
+```
+
+This generated the default NestJS application structure and configured TypeScript support.
+
+---
+
+# Core Dependencies Installed
+
+## Configuration Management
+
+```bash
+npm install @nestjs/config
+```
+
+Purpose:
+
+* Environment variable management
+* Centralized configuration
+* Runtime configuration loading
+
+---
+
+## Database Integration
+
+```bash
+npm install @nestjs/typeorm typeorm pg
+```
+
+Purpose:
+
+* PostgreSQL database integration
+* ORM support using TypeORM
+* Repository pattern implementation
+* Entity management
+
+---
+
+## Validation
+
+```bash
+npm install class-validator class-transformer
+```
+
+Purpose:
+
+* Request payload validation
+* DTO transformation
+* Automatic request sanitization
+
+---
+
+# PostgreSQL Setup
+
+PostgreSQL was installed locally and configured for development.
+
+Database created:
+
+```sql
+CREATE DATABASE nest_assignment;
+```
+
+Verification:
+
+```sql
+\l
+```
+
+Expected output includes:
+
+```text
+nest_assignment
+```
+
+---
+
+# Environment Configuration
+
+A `.env` file was created to store application configuration values.
+
+```env
+PORT=3000
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=********
+DB_NAME=nest_assignment
+```
+
+Purpose:
+
+* Separate configuration from source code
+* Environment-specific settings
+* Secure credentials management
+
+---
+
+# Configuration Module Setup
+
+A dedicated configuration layer was implemented.
+
+## configuration.ts
+
+Responsible for exposing application-level configuration.
+
+```text
+src/config/configuration.ts
+```
+
+Responsibilities:
+
+* Load environment variables
+* Provide typed configuration values
+* Centralize configuration access
+
+---
+
+## database.config.ts
+
+Responsible for database configuration.
+
+```text
+src/config/database.config.ts
+```
+
+Responsibilities:
+
+* PostgreSQL connection settings
+* TypeORM configuration
+* Entity discovery
+* Synchronization settings
+
+---
+
+# Database Layer Setup
+
+A dedicated database directory was created.
+
+```text
+src/database/
+```
+
+Contains:
+
+```text
+data-source.ts
+```
+
+Purpose:
+
+* TypeORM DataSource configuration
+* Migration support
+* Future seeding support
+* CLI integration
+
+---
+
+# Global Validation Configuration
+
+NestJS ValidationPipe was configured globally.
+
+```ts
+app.useGlobalPipes(
+  new ValidationPipe({
+    whitelist: true,
+    transform: true,
+    forbidNonWhitelisted: true,
+  }),
+);
+```
+
+Purpose:
+
+### whitelist
+
+Removes unknown properties.
+
+Example:
+
+```json
+{
+  "name": "Ashish",
+  "randomField": "remove me"
+}
+```
+
+Result:
+
+```json
+{
+  "name": "Ashish"
+}
+```
+
+---
+
+### transform
+
+Automatically converts request values into DTO types.
+
+Example:
+
+```json
+{
+  "id": "1"
+}
+```
+
+Result:
+
+```ts
+id: number
+```
+
+---
+
+### forbidNonWhitelisted
+
+Rejects unexpected fields.
+
+Example:
+
+```json
+{
+  "name": "Ashish",
+  "hackField": "invalid"
+}
+```
+
+Returns:
+
+```http
+400 Bad Request
+```
+
+---
+
+# Application Module Configuration
+
+The root module was configured with:
+
+* ConfigModule
+* TypeOrmModule
+
+Responsibilities:
+
+```text
+AppModule
+│
+├── ConfigModule
+│
+└── TypeOrmModule
+```
+
+This establishes:
+
+* Global configuration access
+* Database connectivity
+* Application-wide dependency injection
+
+---
+
+# Current Project Structure
+
+```text
+src/
+│
+├── main.ts
+├── app.module.ts
+│
+├── config/
+│   ├── configuration.ts
+│   └── database.config.ts
+│
+└── database/
+    └── data-source.ts
+```
+
+---
+
+# Verification Checklist
+
+The following items were successfully completed:
+
+* NestJS project initialized
+* PostgreSQL installed
+* PostgreSQL server running
+* Database created
+* Environment variables configured
+* ConfigModule configured globally
+* TypeORM configured
+* ValidationPipe configured globally
+* DataSource created
+* Application bootstraps successfully
+* Database connection established
+
+---
+
+# Outcome
+
+At the end of Phase 0, the application has a production-ready foundation with:
+
+* Modular architecture
+* PostgreSQL connectivity
+* Centralized configuration
+* Validation infrastructure
+* TypeORM integration
+* Environment management
+
+The project is now ready for Phase 1: Users CRUD Module implementation.
+
+---
+
