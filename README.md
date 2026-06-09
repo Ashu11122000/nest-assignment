@@ -2347,3 +2347,695 @@ At the end of Phase 5, the application provides centralized validation, consiste
 The system is now more secure, maintainable, and production-ready, ensuring that clients receive predictable responses while reducing the complexity of error management throughout the application.
 
 ---
+
+# Phase 6 – RabbitMQ Microservice & Notification System
+
+## Objective
+
+The goal of Phase 6 is to introduce asynchronous communication and microservice architecture into the application using RabbitMQ and NestJS Microservices.
+
+Up to this point, all modules communicate directly through HTTP requests and service calls. In real-world applications, many operations such as notifications, emails, logging, analytics, and background processing should not block the main request-response cycle.
+
+This phase demonstrates how to decouple services using a message broker and event-driven architecture. RabbitMQ is used as the messaging system to exchange events between the main application and a dedicated notification microservice.
+
+The implementation fulfills the assignment requirement of creating a lightweight microservice using RabbitMQ.
+
+---
+
+# Features Implemented
+
+## RabbitMQ Integration
+
+RabbitMQ was integrated as the application's message broker.
+
+Responsibilities:
+
+* Message routing
+* Event publishing
+* Event consumption
+* Service decoupling
+* Reliable message delivery
+
+The application can now send and receive events asynchronously without requiring direct communication between modules.
+
+---
+
+## RabbitMQ Module
+
+A dedicated RabbitMQ Module was created to encapsulate messaging functionality.
+
+Responsibilities:
+
+* RabbitMQ connection management
+* Producer configuration
+* Consumer registration
+* Queue management
+* Message publishing
+
+This module acts as the communication layer between application services and RabbitMQ.
+
+---
+
+## Event-Driven Architecture
+
+The application now follows an event-driven communication model.
+
+Instead of:
+
+```text
+Application
+     ↓
+Direct Service Call
+     ↓
+Notification Service
+```
+
+The system uses:
+
+```text
+Application
+     ↓
+RabbitMQ Producer
+     ↓
+RabbitMQ Queue
+     ↓
+RabbitMQ Consumer
+     ↓
+Notification Microservice
+```
+
+This architecture improves scalability and system flexibility.
+
+---
+
+## Notification Module
+
+A dedicated Notification Module was introduced.
+
+Responsibilities:
+
+* Receiving notification events
+* Processing incoming messages
+* Executing notification logic
+* Logging notification activity
+
+The notification system acts as an independent business component that reacts to events published by the main application.
+
+---
+
+## Message Producer
+
+A RabbitMQ Producer was implemented to publish events to queues.
+
+Responsibilities:
+
+* Create notification events
+* Send messages to RabbitMQ
+* Trigger asynchronous workflows
+
+Example events:
+
+* User Registered
+* Product Created
+* File Uploaded
+* User Updated
+
+The producer allows the main application to emit events without waiting for additional processing.
+
+---
+
+## Message Consumer
+
+A RabbitMQ Consumer was implemented to listen for incoming events.
+
+Responsibilities:
+
+* Receive queue messages
+* Deserialize payloads
+* Process business events
+* Trigger notification actions
+
+The consumer automatically reacts whenever new events are published.
+
+---
+
+# Notification Workflow
+
+The notification process follows the sequence below:
+
+```text
+User Action
+     ↓
+Application Service
+     ↓
+RabbitMQ Producer
+     ↓
+RabbitMQ Queue
+     ↓
+RabbitMQ Consumer
+     ↓
+Notification Service
+     ↓
+Notification Processed
+```
+
+Example:
+
+1. User registration completed.
+2. Registration event published.
+3. RabbitMQ stores event.
+4. Consumer receives event.
+5. Notification service processes message.
+6. Notification logged successfully.
+
+---
+
+# Microservice Implementation
+
+A dedicated Notification Microservice was created using NestJS Microservices.
+
+Responsibilities:
+
+* Independent event processing
+* Queue subscription
+* Background task execution
+* Notification handling
+
+The microservice operates independently from the main application while remaining connected through RabbitMQ.
+
+---
+
+## Queue Configuration
+
+RabbitMQ queues were configured for event processing.
+
+Example queue:
+
+```text
+notifications_queue
+```
+
+Purpose:
+
+* Store notification events
+* Ensure reliable delivery
+* Support asynchronous processing
+
+---
+
+# Event Payload Structure
+
+Messages exchanged between services follow a consistent structure.
+
+Example:
+
+```json
+{
+  "event": "USER_REGISTERED",
+  "userId": 1,
+  "email": "user@example.com"
+}
+```
+
+Benefits:
+
+* Predictable communication
+* Easier debugging
+* Consistent event contracts
+
+---
+
+# Error Handling
+
+The messaging layer includes structured error handling.
+
+Handled scenarios include:
+
+* RabbitMQ connection failures
+* Queue availability issues
+* Invalid message payloads
+* Consumer processing failures
+* Unexpected microservice exceptions
+
+This improves system reliability and resilience.
+
+---
+
+# Benefits of Asynchronous Processing
+
+Introducing RabbitMQ provides several advantages:
+
+* Improved scalability
+* Reduced request latency
+* Service decoupling
+* Background processing support
+* Fault isolation
+* Better maintainability
+
+These are common patterns used in enterprise-grade distributed systems.
+
+---
+
+# Security Considerations
+
+The messaging infrastructure was configured with security best practices.
+
+Measures include:
+
+* Environment-based configuration
+* Controlled queue access
+* Internal service communication
+* Structured message validation
+
+Sensitive information is never exposed through queue messages.
+
+---
+
+# Learning Outcomes
+
+Phase 6 demonstrates the following concepts:
+
+* Microservice Architecture
+* Event-Driven Design
+* RabbitMQ Integration
+* Message Queues
+* Producers and Consumers
+* Asynchronous Communication
+* Background Processing
+* NestJS Microservices
+* Distributed System Fundamentals
+* Service Decoupling
+
+---
+
+# Testing Performed
+
+The following scenarios were verified:
+
+* RabbitMQ connection established
+* Queue creation successful
+* Event publishing successful
+* Event consumption successful
+* Notification processing successful
+* Invalid message handling
+* Consumer error recovery
+* Microservice communication verified
+
+---
+
+# Outcome
+
+At the end of Phase 6, the application supports asynchronous event-driven communication using RabbitMQ and NestJS Microservices.
+
+The system can publish events, process messages through queues, and execute notification workflows independently of the main application. This introduces a scalable microservice architecture and fulfills the messaging and microservice requirements of the assignment.
+
+---
+
+# Phase 7 – Testing (Unit Testing & End-to-End Testing)
+
+## Objective
+
+The goal of Phase 7 is to ensure the reliability, stability, and correctness of the application through automated testing.
+
+As the application grows and includes multiple modules such as Users, Authentication, Products, Uploads, and RabbitMQ Notifications, manual testing becomes insufficient. Automated testing helps verify that individual components work correctly and that the entire application behaves as expected when handling real HTTP requests.
+
+This phase fulfills the assignment requirement of implementing both Unit Tests and End-to-End (E2E) Tests using Jest and Supertest.
+
+---
+
+# Features Implemented
+
+## Unit Testing
+
+Unit testing focuses on testing individual components in isolation.
+
+The primary objective is to verify that services, controllers, and business logic behave correctly without relying on external systems such as databases, RabbitMQ, or Cloudinary.
+
+Responsibilities:
+
+* Validate business logic
+* Verify service behavior
+* Test error handling
+* Ensure predictable outputs
+* Improve code quality
+
+---
+
+## End-to-End Testing
+
+End-to-End (E2E) testing verifies the complete application workflow.
+
+These tests simulate real HTTP requests and validate how multiple components interact together.
+
+Responsibilities:
+
+* Test API endpoints
+* Verify request validation
+* Validate authentication flows
+* Test database interactions
+* Confirm response structures
+
+---
+
+# Testing Frameworks
+
+The application uses the following testing tools:
+
+## Jest
+
+Jest serves as the primary testing framework.
+
+Capabilities:
+
+* Unit testing
+* Mocking dependencies
+* Assertions
+* Test coverage reporting
+
+Benefits:
+
+* Fast execution
+* TypeScript support
+* Rich testing ecosystem
+
+---
+
+## Supertest
+
+Supertest is used for End-to-End API testing.
+
+Capabilities:
+
+* HTTP request simulation
+* API response verification
+* Authentication testing
+* Integration validation
+
+Benefits:
+
+* Realistic API testing
+* Easy request creation
+* Seamless NestJS integration
+
+---
+
+# Unit Tests Implemented
+
+The following modules include unit tests:
+
+## Users Service
+
+Tests:
+
+* Create user
+* Retrieve users
+* Find user by ID
+* Update user
+* Delete user
+* Handle missing users
+* Prevent duplicate emails
+
+---
+
+## Authentication Service
+
+Tests:
+
+* User registration
+* User login
+* Password validation
+* JWT token generation
+* Invalid credential handling
+
+---
+
+## Products Service
+
+Tests:
+
+* Product creation
+* Product retrieval
+* Product updates
+* Product deletion
+* Product validation
+
+---
+
+## Uploads Service
+
+Tests:
+
+* File upload processing
+* Cloudinary integration mocking
+* Upload response handling
+* Error handling
+
+---
+
+## Notifications Service
+
+Tests:
+
+* Event publishing
+* RabbitMQ integration mocking
+* Notification processing
+* Error handling
+
+---
+
+# Mocking Strategy
+
+External dependencies are mocked to ensure tests remain isolated.
+
+Examples:
+
+* TypeORM repositories
+* JWT services
+* Cloudinary services
+* RabbitMQ producers
+* External API calls
+
+Benefits:
+
+* Faster execution
+* Reliable test results
+* No dependency on external systems
+
+---
+
+# End-to-End Tests Implemented
+
+The following API workflows are tested:
+
+## Authentication APIs
+
+Endpoints:
+
+* POST /auth/register
+* POST /auth/login
+
+Scenarios:
+
+* Successful registration
+* Duplicate email handling
+* Successful login
+* Invalid credentials
+
+---
+
+## Users APIs
+
+Endpoints:
+
+* POST /users
+* GET /users
+* GET /users/:id
+* PATCH /users/:id
+* DELETE /users/:id
+
+Scenarios:
+
+* CRUD operations
+* Validation errors
+* Missing resource handling
+
+---
+
+## Products APIs
+
+Endpoints:
+
+* POST /products
+* GET /products
+* GET /products/:id
+* PATCH /products/:id
+* DELETE /products/:id
+
+Scenarios:
+
+* Product CRUD
+* Authentication validation
+* Error handling
+
+---
+
+## Upload APIs
+
+Endpoints:
+
+* POST /uploads
+
+Scenarios:
+
+* Successful upload
+* Missing file handling
+* Authentication verification
+* Cloudinary response validation
+
+---
+
+## Notification APIs
+
+Endpoints:
+
+* POST /notifications
+
+Scenarios:
+
+* Event publishing
+* Queue interaction
+* Validation handling
+
+---
+
+# Test Structure
+
+```text
+test/
+│
+├── unit/
+│   ├── auth.service.spec.ts
+│   ├── users.service.spec.ts
+│   ├── products.service.spec.ts
+│   ├── uploads.service.spec.ts
+│   └── notifications.service.spec.ts
+│
+├── e2e/
+│   ├── auth.e2e-spec.ts
+│   ├── users.e2e-spec.ts
+│   ├── products.e2e-spec.ts
+│   ├── uploads.e2e-spec.ts
+│   └── notifications.e2e-spec.ts
+│
+├── mocks/
+│   ├── user.mock.ts
+│   ├── product.mock.ts
+│   ├── jwt.mock.ts
+│   └── notification.mock.ts
+│
+└── jest-e2e.json
+```
+
+---
+
+# Running Tests
+
+Run all tests:
+
+```bash
+npm test
+```
+
+Run unit tests:
+
+```bash
+npm run test:watch
+```
+
+Run E2E tests:
+
+```bash
+npm run test:e2e
+```
+
+Run coverage report:
+
+```bash
+npm run test:cov
+```
+
+---
+
+# Code Coverage
+
+Coverage reporting is enabled through Jest.
+
+Metrics include:
+
+* Statements Coverage
+* Branch Coverage
+* Function Coverage
+* Line Coverage
+
+Benefits:
+
+* Identify untested code
+* Improve reliability
+* Maintain quality standards
+
+---
+
+# Benefits of Automated Testing
+
+Implementing automated testing provides:
+
+* Improved reliability
+* Faster bug detection
+* Safer refactoring
+* Better maintainability
+* Higher code quality
+* Increased deployment confidence
+
+---
+
+# Learning Outcomes
+
+Phase 7 demonstrates the following concepts:
+
+* Unit Testing
+* End-to-End Testing
+* Jest Framework
+* Supertest Integration
+* Mocking Strategies
+* Dependency Isolation
+* API Validation Testing
+* Authentication Testing
+* Integration Testing
+* Test Coverage Analysis
+
+---
+
+# Testing Performed
+
+The following scenarios were verified:
+
+* Successful API operations
+* Validation failures
+* Authentication failures
+* Authorization restrictions
+* Database interactions
+* Cloudinary integration
+* RabbitMQ event publishing
+* Structured response validation
+* Error handling workflows
+
+---
+
+# Outcome
+
+At the end of Phase 7, the application contains a comprehensive automated testing suite covering both business logic and API workflows.
+
+The system can now be validated automatically through unit tests and end-to-end tests, ensuring reliability, maintainability, and production readiness while fulfilling the testing requirements of the assignment.
+
+---
+
