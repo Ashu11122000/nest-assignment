@@ -1757,3 +1757,593 @@ At the end of Phase 3, the application supports secure product management functi
 
 ---
 
+# Phase 4 – Cloud Storage Integration (Cloudinary File Upload Module)
+
+## Objective
+
+The goal of Phase 4 is to integrate a third-party cloud storage service into the application. This phase demonstrates how a NestJS application can communicate with external services and manage file uploads securely and efficiently.
+
+Cloudinary was selected as the cloud storage provider because it offers scalable media storage, secure asset management, content delivery, and image optimization capabilities. Instead of storing uploaded files on the application server, files are uploaded directly to Cloudinary and made available through secure URLs.
+
+This phase fulfills the assignment requirement of integrating a third-party service into the application.
+
+---
+
+# Features Implemented
+
+## Cloudinary Integration
+
+Cloudinary was configured as an external cloud storage provider using environment-based credentials.
+
+The integration includes:
+
+* Cloudinary SDK configuration
+* Secure credential management
+* File upload functionality
+* External API communication
+* Cloud-based asset storage
+
+The application can now upload files directly to Cloudinary and receive metadata about the uploaded resources.
+
+---
+
+## Upload Module
+
+A dedicated Uploads Module was created to encapsulate all file upload functionality.
+
+Responsibilities include:
+
+* Handling file upload requests
+* Communicating with Cloudinary
+* Managing upload responses
+* Organizing upload-related business logic
+
+This modular approach keeps the application maintainable and scalable.
+
+---
+
+## Upload Controller
+
+The Upload Controller exposes REST API endpoints for file uploads.
+
+Responsibilities:
+
+* Receiving multipart form-data requests
+* Accepting uploaded files
+* Invoking upload services
+* Returning upload responses
+
+The controller acts as the entry point for all upload operations.
+
+---
+
+## Upload Service
+
+The Upload Service contains the business logic responsible for file processing and upload orchestration.
+
+Responsibilities:
+
+* Receiving uploaded files
+* Calling Cloudinary services
+* Processing upload results
+* Returning structured responses
+
+The service layer ensures separation of concerns between controllers and external service integrations.
+
+---
+
+## Cloudinary Service
+
+A dedicated Cloudinary Service was implemented to manage communication with Cloudinary APIs.
+
+Responsibilities:
+
+* Configuring Cloudinary SDK
+* Uploading files to cloud storage
+* Handling Cloudinary responses
+* Managing upload errors
+
+This abstraction allows the application to interact with Cloudinary without exposing implementation details to other modules.
+
+---
+
+# File Upload Workflow
+
+The file upload process follows the sequence below:
+
+```text
+Client
+   ↓
+Upload API Endpoint
+   ↓
+Multer File Processing
+   ↓
+Uploads Service
+   ↓
+Cloudinary Service
+   ↓
+Cloudinary Storage
+   ↓
+Upload Response
+```
+
+Workflow:
+
+1. User sends a multipart/form-data request.
+2. NestJS receives the uploaded file.
+3. Multer processes the incoming file.
+4. Upload Service handles the request.
+5. Cloudinary Service uploads the file to Cloudinary.
+6. Cloudinary stores the file securely.
+7. Cloudinary returns upload metadata.
+8. The API returns a structured response containing file information.
+
+---
+
+# Authentication Integration
+
+Upload endpoints are protected using JWT Authentication.
+
+Only authenticated users can upload files to the platform.
+
+Security benefits include:
+
+* Prevention of unauthorized uploads
+* Secure access control
+* User identity verification
+* Consistent authentication across modules
+
+Requests without valid access tokens are rejected.
+
+---
+
+# API Endpoint
+
+The following endpoint was implemented:
+
+| Method | Endpoint | Description               |
+| ------ | -------- | ------------------------- |
+| POST   | /uploads | Upload file to Cloudinary |
+
+Authentication:
+
+```http
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+Request Type:
+
+```text
+multipart/form-data
+```
+
+File Field:
+
+```text
+file
+```
+
+---
+
+# Upload Response
+
+After a successful upload, the API returns Cloudinary metadata.
+
+Example response:
+
+```json
+{
+  "publicId": "sample-file-id",
+  "url": "https://res.cloudinary.com/..."
+}
+```
+
+Returned information includes:
+
+* Cloudinary Public ID
+* Secure File URL
+
+These values can be stored in the database and later used by frontend applications.
+
+---
+
+# Environment Configuration
+
+Cloudinary credentials are managed using environment variables.
+
+Configuration includes:
+
+```env
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+Benefits:
+
+* Secure credential storage
+* Environment-specific configuration
+* Improved deployment flexibility
+* Compliance with security best practices
+
+Sensitive information is never hardcoded into the source code.
+
+---
+
+# Error Handling
+
+The upload module includes structured error handling for common failure scenarios.
+
+Handled cases include:
+
+* Missing file uploads
+* Invalid requests
+* Cloudinary upload failures
+* Network communication errors
+* External service exceptions
+
+Meaningful error responses are returned to API consumers.
+
+---
+
+# Security Considerations
+
+Several security measures were implemented during this phase:
+
+* JWT-protected endpoints
+* Environment-based credentials
+* Secure API communication
+* Controlled file processing
+* Separation of business logic and external integrations
+
+These practices improve overall application security and maintainability.
+
+---
+
+# Benefits of Cloud Storage
+
+Using Cloudinary provides several advantages over local file storage:
+
+* Reduced server storage requirements
+* Improved scalability
+* Global CDN delivery
+* High availability
+* Secure media management
+* Simplified asset handling
+
+This architecture is commonly used in production-grade applications.
+
+---
+
+# Learning Outcomes
+
+Phase 4 demonstrates the following concepts:
+
+* Third-party API integration
+* Cloudinary SDK configuration
+* Cloud-based file storage
+* NestJS file upload handling
+* Multer integration
+* Environment variable management
+* JWT-protected resources
+* Service abstraction patterns
+* External service communication
+* Secure credential handling
+
+---
+
+# Outcome
+
+At the end of Phase 4, the application supports secure cloud-based file uploads using Cloudinary. Files can be uploaded through authenticated API endpoints, stored in a managed cloud environment, and accessed through secure URLs returned by the application.
+
+This phase successfully fulfills the third-party integration requirement of the assignment and prepares the application for real-world media management scenarios.
+
+---
+
+# Phase 5 – Global Validation & Structured Error Handling
+
+## Objective
+
+The goal of Phase 5 is to improve the reliability, consistency, and security of the application by implementing centralized validation and structured error handling mechanisms.
+
+As the application grows and exposes more APIs, it becomes increasingly important to ensure that incoming requests are properly validated and that errors are returned in a predictable format. This phase establishes a common error-handling strategy that is applied across all modules including Users, Authentication, Products, and Uploads.
+
+The implementation follows NestJS best practices by utilizing global validation pipes, exception filters, interceptors, and standardized API responses.
+
+---
+
+# Features Implemented
+
+## Global Request Validation
+
+The application uses NestJS ValidationPipe globally to validate incoming request data before it reaches business logic.
+
+Responsibilities:
+
+* Validate incoming request payloads
+* Remove unexpected properties
+* Transform request data into DTO types
+* Reject invalid requests automatically
+
+Benefits:
+
+* Prevents malformed requests
+* Improves API reliability
+* Reduces security risks
+* Simplifies controller logic
+
+---
+
+## DTO-Based Validation
+
+Validation rules are defined using Data Transfer Objects (DTOs).
+
+Supported validations include:
+
+* Required field validation
+* Email format validation
+* String validation
+* Numeric validation
+* Length constraints
+* Optional field validation
+
+This ensures that all API requests follow a predefined structure before processing.
+
+---
+
+# Validation Workflow
+
+```text
+Client Request
+      ↓
+Validation Pipe
+      ↓
+DTO Validation
+      ↓
+Valid Request → Controller
+      ↓
+Invalid Request → Exception Filter
+      ↓
+Formatted Error Response
+```
+
+The validation layer acts as the first line of defense against invalid or malicious input.
+
+---
+
+# Global Exception Handling
+
+A centralized exception handling mechanism was implemented using NestJS Exception Filters.
+
+Responsibilities:
+
+* Capture application exceptions
+* Handle unexpected errors
+* Format error responses consistently
+* Prevent sensitive information leakage
+
+Instead of returning different error structures from various modules, the application now follows a unified error response format.
+
+---
+
+## HTTP Exception Filter
+
+A dedicated HTTP Exception Filter was implemented.
+
+Handles common HTTP exceptions such as:
+
+* Bad Request (400)
+* Unauthorized (401)
+* Forbidden (403)
+* Not Found (404)
+* Conflict (409)
+
+The filter converts exceptions into structured API responses.
+
+---
+
+## Database Exception Handling
+
+Database-related exceptions are handled separately to provide meaningful responses.
+
+Examples include:
+
+* Duplicate email addresses
+* Unique constraint violations
+* Missing records
+* Invalid database operations
+
+Benefits:
+
+* Improved user feedback
+* Easier debugging
+* Better API consumer experience
+
+---
+
+# Structured API Responses
+
+A consistent response structure was introduced across the application.
+
+Successful responses follow a common format.
+
+Example:
+
+```json
+{
+  "success": true,
+  "message": "Operation completed successfully",
+  "data": {}
+}
+```
+
+Error responses follow a standardized structure.
+
+Example:
+
+```json
+{
+  "success": false,
+  "statusCode": 400,
+  "message": "Validation failed",
+  "errors": [
+    "Email must be valid"
+  ]
+}
+```
+
+Benefits:
+
+* Consistent API contracts
+* Easier frontend integration
+* Improved maintainability
+
+---
+
+# Response Interceptors
+
+Response Interceptors were introduced to standardize successful API responses.
+
+Responsibilities:
+
+* Wrap successful responses
+* Provide consistent response structures
+* Improve API readability
+* Centralize response formatting
+
+This ensures that all modules return responses in a predictable format.
+
+---
+
+# Common Error Scenarios Handled
+
+The application now properly handles:
+
+### Validation Errors
+
+Examples:
+
+* Missing required fields
+* Invalid email addresses
+* Incorrect data types
+* Invalid request payloads
+
+---
+
+### Authentication Errors
+
+Examples:
+
+* Missing JWT tokens
+* Invalid access tokens
+* Expired tokens
+
+---
+
+### Authorization Errors
+
+Examples:
+
+* Insufficient permissions
+* Role restrictions
+* Protected resource access violations
+
+---
+
+### Resource Errors
+
+Examples:
+
+* User not found
+* Product not found
+* File not found
+
+---
+
+### Database Errors
+
+Examples:
+
+* Duplicate records
+* Constraint violations
+* Invalid operations
+
+---
+
+### Upload Errors
+
+Examples:
+
+* Missing files
+* Unsupported file types
+* Cloudinary upload failures
+* External service communication issues
+
+---
+
+# Security Improvements
+
+Phase 5 improves application security through:
+
+* Request sanitization
+* Input validation
+* Error message control
+* Prevention of unexpected payloads
+* Reduced exposure of internal application details
+
+Sensitive implementation details are never exposed to API consumers.
+
+---
+
+# Benefits of Centralized Error Handling
+
+Implementing centralized validation and exception management provides:
+
+* Consistent API behavior
+* Improved debugging
+* Better developer experience
+* Simplified maintenance
+* Reduced duplicate code
+* Enhanced application reliability
+
+---
+
+# Learning Outcomes
+
+Phase 5 demonstrates the following concepts:
+
+* Global ValidationPipe configuration
+* DTO validation strategies
+* Exception Filters
+* Response Interceptors
+* Structured API design
+* Centralized error handling
+* Security-focused validation
+* Consistent response formatting
+* NestJS middleware architecture
+
+---
+
+# Testing Performed
+
+The following scenarios were verified:
+
+* Invalid request payloads
+* Missing required fields
+* Invalid email formats
+* Unauthorized access attempts
+* Forbidden resource access
+* Missing resources
+* Database constraint violations
+* Cloudinary upload failures
+* Structured response formatting
+
+---
+
+# Outcome
+
+At the end of Phase 5, the application provides centralized validation, consistent API responses, and structured error handling across all modules.
+
+The system is now more secure, maintainable, and production-ready, ensuring that clients receive predictable responses while reducing the complexity of error management throughout the application.
+
+---
